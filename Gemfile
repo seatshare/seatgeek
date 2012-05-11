@@ -1,4 +1,4 @@
-source "http://rubygems.org"
+source :rubygems
 
 group :no_travis do
   RUBY_VERSION =~ /^1\.9/ ? gem('ruby-debug19') : gem('ruby-debug')

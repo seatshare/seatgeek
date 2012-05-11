@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = SeatGeek::VERSION
   s.authors     = ["Dan Matthews"]
   s.email       = ["dan@bluefoc.us"]
-  s.homepage    = "https://"
+  s.homepage    = "http://platform.seatgeek.com"
   s.summary     = "A Ruby wrapper for the SeatGeek Platform API."
   s.description = "This gem provides Ruby functionality around the SeatGeek Platform API (http://platform.seatgeek.com). It is designed to be framework agnostic and was originally developed for use in my day job at Ticket Evolution."
 
@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "faraday"
+  s.add_dependency "rake"
 
   s.add_development_dependency "rspec"
 end
