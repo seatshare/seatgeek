@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe SeatGeek::Connection do
   let(:klass) { SeatGeek::Connection }
+  let(:instance) { klass.new }
 
   describe ".adapter" do
     subject { klass.adapter }
@@ -148,8 +149,13 @@ describe SeatGeek::Connection do
     end
   end
 
+  describe "#build_request" do
+    it "should create and return a faraday object" do
+      instance.build_request('/', {}).should be_a_kind_of Faraday::Connection
+    end
+  end
+
   describe "#events" do
-    let(:instance) { klass.new }
 
     context "when passed an id" do
       it "should make a show call to the api" do
@@ -159,18 +165,26 @@ describe SeatGeek::Connection do
   end
 
   describe "#performers" do
-    let(:instance) { klass.new }
-
     context "when passed an id" do
       it "should make a show call to the api" do
         pending "#request existing"
       end
+    end
+  end
+
+  describe "#request" do
+    let(:url) { '/events' }
+    let(:params) { {} }
+    let(:faraday) { mock(:faraday, :get => []) }
+
+    it "should call #build_request with a url and parameters" do
+      instance.should_receive(:build_request).with(url, params).and_return(faraday)
+      faraday.should_receive(:get)
+      instance.request(url, params)
     end
   end
 
   describe "#taxonomies" do
-    let(:instance) { klass.new }
-
     context "when passed an id" do
       it "should make a show call to the api" do
         pending "#request existing"
@@ -178,9 +192,13 @@ describe SeatGeek::Connection do
     end
   end
 
-  describe "#venues" do
-    let(:instance) { klass.new }
+  describe "#uri" do
+    it "should take in a path and combine it with protocol, url and version" do
+      instance.uri('/events').should == "http://api.seatgeek.com/2/events"
+    end
+  end
 
+  describe "#venues" do
     context "when passed an id" do
       it "should make a show call to the api" do
         pending "#request existing"

@@ -43,16 +43,35 @@ module SeatGeek
       end)
     end
 
+    def build_request(path, params)
+      Faraday.new(self.uri(path), {:params => params}) do |builder|
+        builder.adapter adapter
+      end
+    end
+
     def events(args = {})
 
+    end
+
+    # Ruby 1.8.7 / ree compatibility
+    def id
+      @options[:id]
     end
 
     def performers(args = {})
 
     end
 
+    def request(url, params)
+      build_request(url, params).get
+    end
+
     def taxonomies(args = {})
 
+    end
+
+    def uri(path)
+      "#{protocol}://#{url}/#{version}#{path}"
     end
 
     def venues(args = {})

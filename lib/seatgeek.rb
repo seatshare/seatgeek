@@ -1,3 +1,4 @@
+require 'faraday'
 require 'seat_geek/version'
 
 module SeatGeek
