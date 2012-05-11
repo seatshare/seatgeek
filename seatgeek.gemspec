@@ -1,6 +1,8 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "seatgeek"
+require "rubygems"
+require "bundler/setup"
+require 'seatgeek'
 
 Gem::Specification.new do |s|
   s.name        = "seatgeek"
@@ -18,7 +20,6 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "faraday"
   s.add_dependency "rake"
 
   s.add_development_dependency "rspec"
