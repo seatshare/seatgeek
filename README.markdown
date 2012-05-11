@@ -1,4 +1,4 @@
-SeatGeek
+SeatGeek [![Build Status](https://secure.travis-ci.org/ticketevolution/seatgeek.png)](http://travis-ci.org/ticketevolution/seatgeek)
 ========
 SeatGeek maintains a canonical directory of live events in the United States. The SeatGeek Platform makes it easy to construct applications that help users find and discover events by exposing the wealth of data and powerful search behind SeatGeek.com in an easy-to-consume format.
 
