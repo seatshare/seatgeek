@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'ostruct'
 
 describe SeatGeek::Connection do
   let(:klass) { SeatGeek::Connection }
@@ -149,46 +150,93 @@ describe SeatGeek::Connection do
     end
   end
 
-  describe "#build_request" do
-    it "should create and return a faraday object" do
-      instance.build_request('/', {}).should be_a_kind_of Faraday::Connection
+  describe "#events" do
+    let(:url) { '/events'}
+    let(:params) { {:test => 123} }
+
+    it "should call #request with the correct url segment and the params passed" do
+      instance.should_receive(:request).with(url, params)
+      instance.events(params)
     end
   end
 
-  describe "#events" do
+  describe "#handle_response" do
+    let(:response) { double(Faraday::Response, :status => status, :body => body)}
 
-    context "when passed an id" do
-      it "should make a show call to the api" do
-        pending "#request existing"
+    context "when response_format is set to ruby" do
+      context "and the request was successful" do
+        let(:status) { 200 }
+        let(:body) { "{\"meta\":{\"per_page\":1,\"total\":63188,\"page\":1,\"took\":4,\"geolocation\":null},\"events\":[{\"stats\":{\"listing_count\":0,\"average_price\":0,\"lowest_price\":null,\"highest_price\":null},\"relative_url\":\"/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"url\":\"http://seatgeek.com/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"datetime_local\":\"2012-05-14T10:35:00\",\"performers\":[{\"away_team\":true,\"name\":\"Palm Beach Cardinals\",\"url\":\"http://seatgeek.com/palm-beach-cardinals-tickets/\",\"image\":null,\"short_name\":\"Palm Beach Cardinals\",\"slug\":\"palm-beach-cardinals\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9420},{\"home_team\":true,\"name\":\"Jupiter Hammerheads\",\"url\":\"http://seatgeek.com/jupiter-hammerheads-tickets/\",\"image\":null,\"short_name\":\"Jupiter Hammerheads\",\"primary\":true,\"slug\":\"jupiter-hammerheads\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9421}],\"venue\":{\"city\":\"Jupiter\",\"name\":\"Roger Dean Stadium\",\"url\":\"http://seatgeek.com/roger-dean-stadium-tickets/\",\"country\":\"US\",\"state\":\"FL\",\"score\":16592,\"postal_code\":\"33468\",\"location\":{\"lat\":26.8936,\"lon\":-80.1156},\"extended_address\":null,\"address\":\"4751 Main St\",\"id\":3927},\"short_title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"datetime_utc\":\"2012-05-14T14:35:00\",\"score\":0,\"taxonomies\":[{\"parent_id\":null,\"id\":1000000,\"name\":\"sports\"},{\"parent_id\":1000000,\"id\":1010000,\"name\":\"baseball\"},{\"parent_id\":1010000,\"id\":1010300,\"name\":\"minor_league_baseball\"}],\"type\":\"minor_league_baseball\",\"id\":798459}]}" }
+
+        it "should parse the json returned and respond with a ruby object" do
+          instance.handle_response(response).should == MultiJson.decode(body)
+        end
+      end
+
+      context "and the request was not successful" do
+        let(:status) { 500 }
+        let(:body) { "Internal Server Error" }
+
+        it "should return the status code and exact result body" do
+          instance.handle_response(response).should == {:status => status, :body => body}
+        end
+      end
+    end
+
+    context "when response format is not set to ruby" do
+      let(:status) { 200 }
+      let(:body) { "{\"meta\":{\"per_page\":1,\"total\":63188,\"page\":1,\"took\":4,\"geolocation\":null},\"events\":[{\"stats\":{\"listing_count\":0,\"average_price\":0,\"lowest_price\":null,\"highest_price\":null},\"relative_url\":\"/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"url\":\"http://seatgeek.com/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"datetime_local\":\"2012-05-14T10:35:00\",\"performers\":[{\"away_team\":true,\"name\":\"Palm Beach Cardinals\",\"url\":\"http://seatgeek.com/palm-beach-cardinals-tickets/\",\"image\":null,\"short_name\":\"Palm Beach Cardinals\",\"slug\":\"palm-beach-cardinals\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9420},{\"home_team\":true,\"name\":\"Jupiter Hammerheads\",\"url\":\"http://seatgeek.com/jupiter-hammerheads-tickets/\",\"image\":null,\"short_name\":\"Jupiter Hammerheads\",\"primary\":true,\"slug\":\"jupiter-hammerheads\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9421}],\"venue\":{\"city\":\"Jupiter\",\"name\":\"Roger Dean Stadium\",\"url\":\"http://seatgeek.com/roger-dean-stadium-tickets/\",\"country\":\"US\",\"state\":\"FL\",\"score\":16592,\"postal_code\":\"33468\",\"location\":{\"lat\":26.8936,\"lon\":-80.1156},\"extended_address\":null,\"address\":\"4751 Main St\",\"id\":3927},\"short_title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"datetime_utc\":\"2012-05-14T14:35:00\",\"score\":0,\"taxonomies\":[{\"parent_id\":null,\"id\":1000000,\"name\":\"sports\"},{\"parent_id\":1000000,\"id\":1010000,\"name\":\"baseball\"},{\"parent_id\":1010000,\"id\":1010300,\"name\":\"minor_league_baseball\"}],\"type\":\"minor_league_baseball\",\"id\":798459}]}" }
+
+      it "should return the status code and exact result body" do
+        klass.new(:response_format => :json).\
+          handle_response(response).should == {:status => status, :body => body}
       end
     end
   end
 
   describe "#performers" do
-    context "when passed an id" do
-      it "should make a show call to the api" do
-        pending "#request existing"
-      end
+    let(:url) { '/performers'}
+    let(:params) { {:test => 123} }
+
+    it "should call #request with the correct url segment and the params passed" do
+      instance.should_receive(:request).with(url, params)
+      instance.performers(params)
     end
   end
 
   describe "#request" do
-    let(:url) { '/events' }
+    let(:url) { 'http://api.seatgeek.com/2/events' }
     let(:params) { {} }
-    let(:faraday) { mock(:faraday, :get => []) }
+    let(:faraday) { mock(:faraday, :get => OpenStruct.new({:status => 200, :body => "[]"})) }
 
-    it "should call #build_request with a url and parameters" do
-      instance.should_receive(:build_request).with(url, params).and_return(faraday)
-      faraday.should_receive(:get)
-      instance.request(url, params)
+    context "when .response_format is jsonp" do
+      let(:instance) { klass.new({:response_format => :jsonp}) }
+      let(:expected_params) { {:params => params.merge({:format => :jsonp})} }
+
+      it "should set the format param to jsonp" do
+        Faraday.should_receive(:new).with(url, expected_params).and_return(faraday)
+        instance.request(url, params)
+      end
+    end
+
+    context "when .response_format is xml" do
+      let(:instance) { klass.new({:response_format => :xml}) }
+      let(:expected_params) { {:params => params.merge({:format => :xml})} }
+
+      it "should set the format param to xml" do
+        Faraday.should_receive(:new).with(url, expected_params).and_return(faraday)
+        instance.request(url, params)
+      end
     end
   end
 
   describe "#taxonomies" do
-    context "when passed an id" do
-      it "should make a show call to the api" do
-        pending "#request existing"
-      end
+    let(:url) { '/taxonomies'}
+    let(:params) { {:test => 123} }
+
+    it "should call #request with the correct url segment and the params passed" do
+      instance.should_receive(:request).with(url, params)
+      instance.taxonomies(params)
     end
   end
 
@@ -199,10 +247,12 @@ describe SeatGeek::Connection do
   end
 
   describe "#venues" do
-    context "when passed an id" do
-      it "should make a show call to the api" do
-        pending "#request existing"
-      end
+    let(:url) { '/venues'}
+    let(:params) { {:test => 123} }
+
+    it "should call #request with the correct url segment and the params passed" do
+      instance.should_receive(:request).with(url, params)
+      instance.venues(params)
     end
   end
 end

@@ -1,3 +1,5 @@
+require 'faraday'
+
 module SeatGeek
   class Connection
     class << self; self; end.class_eval do
@@ -43,14 +45,16 @@ module SeatGeek
       end)
     end
 
-    def build_request(path, params)
-      Faraday.new(self.uri(path), {:params => params}) do |builder|
-        builder.adapter adapter
-      end
+    def events(params = {})
+      request('/events', params)
     end
 
-    def events(args = {})
-
+    def handle_response(response)
+      if response_format == :ruby and response.status == 200
+        MultiJson.decode(response.body)
+      else
+        {:status => response.status, :body => response.body}
+      end
     end
 
     # Ruby 1.8.7 / ree compatibility
@@ -58,30 +62,47 @@ module SeatGeek
       @options[:id]
     end
 
-    def performers(args = {})
-
+    def performers(params = {})
+      request('/performers', params)
     end
 
     def request(url, params)
-      build_request(url, params).get
+      handle_response(Faraday.new(*builder(url, params.clone)) do |build|
+        build.adapter adapter
+      end.get)
     end
 
-    def taxonomies(args = {})
+    def response_format
+      @options[:response_format].to_sym
+    end
 
+    def taxonomies(params = {})
+      request('/taxonomies', params)
     end
 
     def uri(path)
       "#{protocol}://#{url}/#{version}#{path}"
     end
 
-    def venues(args = {})
-
+    def venues(params = {})
+      request('/venues', params)
     end
 
     private
 
-    def method_missing(method, *args)
-      @options.keys.include?(method.to_sym) && args.first.nil? ? @options[method.to_sym] : super
+    def method_missing(method, *params)
+      @options.keys.include?(method.to_sym) && params.first.nil? ? @options[method.to_sym] : super
+    end
+
+    def builder(uri_segment, params)
+      return [
+        uri([].tap do |part|
+          part << "/events"
+          part << "/#{params.delete(:id)}" unless params[:id].nil?
+        end.join),
+        {:params => ([:jsonp, :xml].include?(response_format) ? \
+                     params.merge(:format => response_format) : params)}
+      ]
     end
   end
 end
