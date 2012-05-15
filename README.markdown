@@ -1,4 +1,4 @@
-SeatGeek
+SeatGeek [![Build Status](https://secure.travis-ci.org/ticketevolution/seatgeek.png)](http://travis-ci.org/ticketevolution/seatgeek)
 ========
 SeatGeek maintains a canonical directory of live events in the United States. The SeatGeek Platform makes it easy to construct applications that help users find and discover events by exposing the wealth of data and powerful search behind SeatGeek.com in an easy-to-consume format.
 
@@ -18,7 +18,7 @@ Installation
 **With Bundler**
 In your Gemfile, add the following line
 
-    gem 'seatgeek'
+    gem 'seatgeek', :require => 'seatgeek'
 
 **Without Bundler**
 
@@ -33,7 +33,7 @@ Acknowledgements
 
 DISCLAIMER / LEGAL
 ------------------
-Copyright (c) 2012 Dan Matthews ([http://github.com/bluefocus](http://github.com/bluefocus))
+Copyright (c) 2012 Ticket Evolution / Dan Matthews ([http://ticketevolution.com](http://ticketevolution.com))
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
