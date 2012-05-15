@@ -8,9 +8,13 @@ module SeatGeek
 
       def events(*args); new.events(*args); end
 
+      def logger; @@logger ||= nil; end
+      def logger=(input); @@logger = input; end
+
       def options
         {
           :adapter => adapter,
+          :logger => logger,
           :protocol => protocol,
           :response_format => response_format,
           :url => url,
@@ -69,6 +73,7 @@ module SeatGeek
     def request(url, params)
       handle_response(Faraday.new(*builder(url, params.clone)) do |build|
         build.adapter adapter
+        build.use Faraday::Response::VerboseLogger, logger if logger.present?
       end.get)
     end
 

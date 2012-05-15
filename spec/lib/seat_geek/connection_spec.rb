@@ -30,10 +30,25 @@ describe SeatGeek::Connection do
     end
   end
 
+  describe ".logger" do
+    subject { klass.logger }
+    let(:default) { nil }
+    let(:logger) { Logger.new(STDOUT) }
+
+    it { should == default }
+    it "should be writable" do
+      klass.logger = logger
+      klass.logger.should == logger
+    end
+
+    after { klass.logger = default }
+  end
+
   describe ".options" do
     it "should return a hash of all of the class level settings" do
       klass.options.should == {
         :adapter => :net_http,
+        :logger => nil,
         :protocol => :http,
         :response_format => :ruby,
         :url => "api.seatgeek.com",
