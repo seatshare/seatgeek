@@ -228,6 +228,16 @@ describe SeatGeek::Connection do
         instance.request(url, params)
       end
     end
+
+    context "when additional parameters were passed to #initialize" do
+      let(:instance) { klass.new({:response_format => :jsonp, :testing => 123}) }
+      let(:expected_params) { {:params => params.merge({:format => :jsonp, :testing => 123})} }
+
+      it "should add those parameters to the request params" do
+        Faraday.should_receive(:new).with(url, expected_params).and_return(faraday)
+        instance.request(url, params)
+      end
+    end
   end
 
   describe "#taxonomies" do

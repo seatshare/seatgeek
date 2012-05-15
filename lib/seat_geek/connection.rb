@@ -100,9 +100,21 @@ module SeatGeek
           part << "/events"
           part << "/#{params.delete(:id)}" unless params[:id].nil?
         end.join),
-        {:params => ([:jsonp, :xml].include?(response_format) ? \
-                     params.merge(:format => response_format) : params)}
+        {
+          :params => custom_options.merge((
+            [:jsonp, :xml].include?(response_format) ? \
+              params.merge(:format => response_format) : params))
+        }
       ]
+    end
+
+    def custom_options
+      @custom_options ||= {}.tap do |opts|
+        ignore = self.class.options.keys
+        @options.each do |k, v|
+          opts[k] = v unless ignore.include?(k)
+        end
+      end
     end
   end
 end
