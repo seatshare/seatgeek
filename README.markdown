@@ -18,7 +18,7 @@ Installation
 **With Bundler**
 In your Gemfile, add the following line
 
-    gem 'seatgeek'
+    gem 'seatgeek', :require => 'seatgeek'
 
 **Without Bundler**
 

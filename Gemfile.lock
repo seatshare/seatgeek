@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     seatgeek (0.0.1)
+      faraday
       multi_json
       rake
       yajl-ruby
@@ -46,6 +47,9 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   faraday
+  multi_json
+  rake
   rspec
   ruby-debug19
   seatgeek!
+  yajl-ruby
