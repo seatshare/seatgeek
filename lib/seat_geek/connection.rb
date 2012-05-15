@@ -102,7 +102,7 @@ module SeatGeek
     def builder(uri_segment, params)
       return [
         uri([].tap do |part|
-          part << "/events"
+          part << uri_segment
           part << "/#{params.delete(:id)}" unless params[:id].nil?
         end.join),
         {
