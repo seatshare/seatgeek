@@ -220,7 +220,8 @@ describe SeatGeek::Connection do
   end
 
   describe "#request" do
-    let(:url) { 'http://api.seatgeek.com/2/events' }
+    let(:uri_segment) { '/venues' }
+    let(:url) { "http://api.seatgeek.com/2#{uri_segment}" }
     let(:params) { {} }
     let(:faraday) { mock(:faraday, :get => OpenStruct.new({:status => 200, :body => "[]"})) }
 
@@ -230,7 +231,7 @@ describe SeatGeek::Connection do
 
       it "should set the format param to jsonp" do
         Faraday.should_receive(:new).with(url, expected_params).and_return(faraday)
-        instance.request(url, params)
+        instance.request(uri_segment, params)
       end
     end
 
@@ -240,7 +241,7 @@ describe SeatGeek::Connection do
 
       it "should set the format param to xml" do
         Faraday.should_receive(:new).with(url, expected_params).and_return(faraday)
-        instance.request(url, params)
+        instance.request(uri_segment, params)
       end
     end
 
@@ -250,7 +251,7 @@ describe SeatGeek::Connection do
 
       it "should add those parameters to the request params" do
         Faraday.should_receive(:new).with(url, expected_params).and_return(faraday)
-        instance.request(url, params)
+        instance.request(uri_segment, params)
       end
     end
   end
