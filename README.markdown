@@ -57,12 +57,12 @@ SeatGeek::Connection objects can be instantiated before calls. Any parameters pa
 
 There are a number of class level options that can be overridden.
 
- - SeatGeek::Connection.adapter - the Faraday adapter to use (default: :net_http)
- - SeatGeek::Connection.logger - a Logger object for logging requests (default: nil)
- - SeatGeek::Connection.protocol - http or https (default: :http)
- - SeatGeek::Connection.response_format - ruby, json, jsonp or xml (default: ruby)
- - SeatGeek::Connection.url - api.seatgeek::Connection.com [Advanced tuning]
- - SeatGeek::Connection.version - 2 [Forward thinking]
+    SeatGeek::Connection.adapter          # the Faraday adapter to use (default: :net_http)
+    SeatGeek::Connection.logger           # a Logger object for logging requests (default: nil)
+    SeatGeek::Connection.protocol         # http or https (default: :http)
+    SeatGeek::Connection.response_format  # ruby, json, jsonp or xml (default: ruby)
+    SeatGeek::Connection.url              # api.seatgeek.com [Advanced tuning]
+    SeatGeek::Connection.version          # 2 [Forward thinking]
 
 Example:
 
