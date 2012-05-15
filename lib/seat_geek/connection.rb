@@ -73,7 +73,7 @@ module SeatGeek
     def request(url, params)
       handle_response(Faraday.new(*builder(url, params.clone)) do |build|
         build.adapter adapter
-        build.use Faraday::Response::VerboseLogger, logger if logger.present?
+        build.use Faraday::Response::VerboseLogger, logger unless logger.nil?
       end.get)
     end
 
