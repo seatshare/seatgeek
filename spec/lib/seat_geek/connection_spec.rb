@@ -49,7 +49,7 @@ describe SeatGeek::Connection do
       klass.options.should == {
         :adapter => :net_http,
         :logger => nil,
-        :protocol => :http,
+        :protocol => :https,
         :response_format => :ruby,
         :url => "api.seatgeek.com",
         :version => 2
@@ -71,7 +71,7 @@ describe SeatGeek::Connection do
 
   describe ".protocol" do
     subject { klass.protocol }
-    let(:default) { :http }
+    let(:default) { :https }
 
     it { should == default }
     it "should be writable" do
@@ -181,7 +181,7 @@ describe SeatGeek::Connection do
     context "when response_format is set to ruby" do
       context "and the request was successful" do
         let(:status) { 200 }
-        let(:body) { "{\"meta\":{\"per_page\":1,\"total\":63188,\"page\":1,\"took\":4,\"geolocation\":null},\"events\":[{\"stats\":{\"listing_count\":0,\"average_price\":0,\"lowest_price\":null,\"highest_price\":null},\"relative_url\":\"/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"url\":\"http://seatgeek.com/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"datetime_local\":\"2012-05-14T10:35:00\",\"performers\":[{\"away_team\":true,\"name\":\"Palm Beach Cardinals\",\"url\":\"http://seatgeek.com/palm-beach-cardinals-tickets/\",\"image\":null,\"short_name\":\"Palm Beach Cardinals\",\"slug\":\"palm-beach-cardinals\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9420},{\"home_team\":true,\"name\":\"Jupiter Hammerheads\",\"url\":\"http://seatgeek.com/jupiter-hammerheads-tickets/\",\"image\":null,\"short_name\":\"Jupiter Hammerheads\",\"primary\":true,\"slug\":\"jupiter-hammerheads\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9421}],\"venue\":{\"city\":\"Jupiter\",\"name\":\"Roger Dean Stadium\",\"url\":\"http://seatgeek.com/roger-dean-stadium-tickets/\",\"country\":\"US\",\"state\":\"FL\",\"score\":16592,\"postal_code\":\"33468\",\"location\":{\"lat\":26.8936,\"lon\":-80.1156},\"extended_address\":null,\"address\":\"4751 Main St\",\"id\":3927},\"short_title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"datetime_utc\":\"2012-05-14T14:35:00\",\"score\":0,\"taxonomies\":[{\"parent_id\":null,\"id\":1000000,\"name\":\"sports\"},{\"parent_id\":1000000,\"id\":1010000,\"name\":\"baseball\"},{\"parent_id\":1010000,\"id\":1010300,\"name\":\"minor_league_baseball\"}],\"type\":\"minor_league_baseball\",\"id\":798459}]}" }
+        let(:body) { "{\"meta\":{\"per_page\":1,\"total\":63188,\"page\":1,\"took\":4,\"geolocation\":null},\"events\":[{\"stats\":{\"listing_count\":0,\"average_price\":0,\"lowest_price\":null,\"highest_price\":null},\"relative_url\":\"/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"url\":\"https://seatgeek.com/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"datetime_local\":\"2012-05-14T10:35:00\",\"performers\":[{\"away_team\":true,\"name\":\"Palm Beach Cardinals\",\"url\":\"https://seatgeek.com/palm-beach-cardinals-tickets/\",\"image\":null,\"short_name\":\"Palm Beach Cardinals\",\"slug\":\"palm-beach-cardinals\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9420},{\"home_team\":true,\"name\":\"Jupiter Hammerheads\",\"url\":\"https://seatgeek.com/jupiter-hammerheads-tickets/\",\"image\":null,\"short_name\":\"Jupiter Hammerheads\",\"primary\":true,\"slug\":\"jupiter-hammerheads\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9421}],\"venue\":{\"city\":\"Jupiter\",\"name\":\"Roger Dean Stadium\",\"url\":\"https://seatgeek.com/roger-dean-stadium-tickets/\",\"country\":\"US\",\"state\":\"FL\",\"score\":16592,\"postal_code\":\"33468\",\"location\":{\"lat\":26.8936,\"lon\":-80.1156},\"extended_address\":null,\"address\":\"4751 Main St\",\"id\":3927},\"short_title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"datetime_utc\":\"2012-05-14T14:35:00\",\"score\":0,\"taxonomies\":[{\"parent_id\":null,\"id\":1000000,\"name\":\"sports\"},{\"parent_id\":1000000,\"id\":1010000,\"name\":\"baseball\"},{\"parent_id\":1010000,\"id\":1010300,\"name\":\"minor_league_baseball\"}],\"type\":\"minor_league_baseball\",\"id\":798459}]}" }
 
         it "should parse the json returned and respond with a ruby object" do
           instance.handle_response(response).should == MultiJson.decode(body)
@@ -200,7 +200,7 @@ describe SeatGeek::Connection do
 
     context "when response format is not set to ruby" do
       let(:status) { 200 }
-      let(:body) { "{\"meta\":{\"per_page\":1,\"total\":63188,\"page\":1,\"took\":4,\"geolocation\":null},\"events\":[{\"stats\":{\"listing_count\":0,\"average_price\":0,\"lowest_price\":null,\"highest_price\":null},\"relative_url\":\"/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"url\":\"http://seatgeek.com/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"datetime_local\":\"2012-05-14T10:35:00\",\"performers\":[{\"away_team\":true,\"name\":\"Palm Beach Cardinals\",\"url\":\"http://seatgeek.com/palm-beach-cardinals-tickets/\",\"image\":null,\"short_name\":\"Palm Beach Cardinals\",\"slug\":\"palm-beach-cardinals\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9420},{\"home_team\":true,\"name\":\"Jupiter Hammerheads\",\"url\":\"http://seatgeek.com/jupiter-hammerheads-tickets/\",\"image\":null,\"short_name\":\"Jupiter Hammerheads\",\"primary\":true,\"slug\":\"jupiter-hammerheads\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9421}],\"venue\":{\"city\":\"Jupiter\",\"name\":\"Roger Dean Stadium\",\"url\":\"http://seatgeek.com/roger-dean-stadium-tickets/\",\"country\":\"US\",\"state\":\"FL\",\"score\":16592,\"postal_code\":\"33468\",\"location\":{\"lat\":26.8936,\"lon\":-80.1156},\"extended_address\":null,\"address\":\"4751 Main St\",\"id\":3927},\"short_title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"datetime_utc\":\"2012-05-14T14:35:00\",\"score\":0,\"taxonomies\":[{\"parent_id\":null,\"id\":1000000,\"name\":\"sports\"},{\"parent_id\":1000000,\"id\":1010000,\"name\":\"baseball\"},{\"parent_id\":1010000,\"id\":1010300,\"name\":\"minor_league_baseball\"}],\"type\":\"minor_league_baseball\",\"id\":798459}]}" }
+      let(:body) { "{\"meta\":{\"per_page\":1,\"total\":63188,\"page\":1,\"took\":4,\"geolocation\":null},\"events\":[{\"stats\":{\"listing_count\":0,\"average_price\":0,\"lowest_price\":null,\"highest_price\":null},\"relative_url\":\"/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"url\":\"https://seatgeek.com/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"datetime_local\":\"2012-05-14T10:35:00\",\"performers\":[{\"away_team\":true,\"name\":\"Palm Beach Cardinals\",\"url\":\"https://seatgeek.com/palm-beach-cardinals-tickets/\",\"image\":null,\"short_name\":\"Palm Beach Cardinals\",\"slug\":\"palm-beach-cardinals\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9420},{\"home_team\":true,\"name\":\"Jupiter Hammerheads\",\"url\":\"https://seatgeek.com/jupiter-hammerheads-tickets/\",\"image\":null,\"short_name\":\"Jupiter Hammerheads\",\"primary\":true,\"slug\":\"jupiter-hammerheads\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9421}],\"venue\":{\"city\":\"Jupiter\",\"name\":\"Roger Dean Stadium\",\"url\":\"https://seatgeek.com/roger-dean-stadium-tickets/\",\"country\":\"US\",\"state\":\"FL\",\"score\":16592,\"postal_code\":\"33468\",\"location\":{\"lat\":26.8936,\"lon\":-80.1156},\"extended_address\":null,\"address\":\"4751 Main St\",\"id\":3927},\"short_title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"datetime_utc\":\"2012-05-14T14:35:00\",\"score\":0,\"taxonomies\":[{\"parent_id\":null,\"id\":1000000,\"name\":\"sports\"},{\"parent_id\":1000000,\"id\":1010000,\"name\":\"baseball\"},{\"parent_id\":1010000,\"id\":1010300,\"name\":\"minor_league_baseball\"}],\"type\":\"minor_league_baseball\",\"id\":798459}]}" }
 
       it "should return the status code and exact result body" do
         klass.new(:response_format => :json).\
@@ -221,7 +221,7 @@ describe SeatGeek::Connection do
 
   describe "#request" do
     let(:uri_segment) { '/venues' }
-    let(:url) { "http://api.seatgeek.com/2#{uri_segment}" }
+    let(:url) { "https://api.seatgeek.com/2#{uri_segment}" }
     let(:params) { {} }
     let(:faraday) { mock(:faraday, :get => OpenStruct.new({:status => 200, :body => "[]"})) }
 
@@ -268,7 +268,7 @@ describe SeatGeek::Connection do
 
   describe "#uri" do
     it "should take in a path and combine it with protocol, url and version" do
-      instance.uri('/events').should == "http://api.seatgeek.com/2/events"
+      instance.uri('/events').should == "https://api.seatgeek.com/2/events"
     end
   end
 
