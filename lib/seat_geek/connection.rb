@@ -24,7 +24,7 @@ module SeatGeek
 
       def performers(*args); new.performers(*args); end
 
-      def protocol; @@protocol ||= :http; end
+      def protocol; @@protocol ||= :https; end
       def protocol=(input); @@protocol = input; end
 
       def response_format; @@response_format ||= :ruby; end
