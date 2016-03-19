@@ -3,3 +3,4 @@
 *.swo
 pkg
 .rvmrc
+*.gem
