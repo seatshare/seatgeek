@@ -32,6 +32,10 @@ NOTE: Unless it is already defined in your application, SG will be defined as a 
 
 SeatGeek::Connection is where all the meat is.
 
+You will first need to provide the `client_id` for your application. For assistance registering and locating your `client_id`, please see [the platform documentation](http://platform.seatgeek.com/#authentication).
+
+    SeatGeek::Connection.client_id = 'some_client_id'
+
 Each of the four endpoints can be accessed with a class method reflecting the endpoint's name.
 
     SeatGeek::Connection.events

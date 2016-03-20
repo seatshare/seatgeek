@@ -18,7 +18,8 @@ module SeatGeek
           :protocol => protocol,
           :response_format => response_format,
           :url => url,
-          :version => version
+          :version => version,
+          :client_id => client_id
         }
       end
 
@@ -39,6 +40,9 @@ module SeatGeek
 
       def version; @@version ||= 2; end
       def version=(input); @@version = input; end
+
+      def client_id; @@client_id ||= nil; end
+      def client_id=(input); @@client_id = input; end
     end
 
     def initialize(options = {})
@@ -71,8 +75,12 @@ module SeatGeek
     end
 
     def request(url, params)
+      fail "You must provide a `client_id` for SeatGeek" unless client_id || params[:client_id]
       handle_response(Faraday.new(*builder(url, params.clone)) do |build|
         build.adapter adapter
+        if client_id
+          build.use Faraday::Request::BasicAuthentication, client_id, nil
+        end
         build.use Faraday::Response::VerboseLogger, logger unless logger.nil?
       end.get)
     end

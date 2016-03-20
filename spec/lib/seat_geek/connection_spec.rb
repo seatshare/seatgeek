@@ -3,7 +3,7 @@ require 'ostruct'
 
 describe SeatGeek::Connection do
   let(:klass) { SeatGeek::Connection }
-  let(:instance) { klass.new }
+  let(:instance) { klass.new({:client_id => 'some_client_id'}) }
 
   describe ".adapter" do
     subject { klass.adapter }
@@ -52,7 +52,8 @@ describe SeatGeek::Connection do
         :protocol => :https,
         :response_format => :ruby,
         :url => "api.seatgeek.com",
-        :version => 2
+        :version => 2,
+        :client_id => nil
       }
     end
   end
@@ -80,6 +81,19 @@ describe SeatGeek::Connection do
     end
 
     after { klass.protocol = default }
+  end
+
+  describe ".client_id" do
+    subject { klass.client_id }
+    let(:default) { nil }
+
+    it { should == default }
+    it "should be writable" do
+      klass.client_id = 'some_client_id'
+      klass.client_id.should == 'some_client_id'
+    end
+
+    after { klass.client_id = default }
   end
 
   describe ".response_format" do
@@ -147,7 +161,7 @@ describe SeatGeek::Connection do
 
   describe "#initialize" do
     let(:expected) { klass.options.merge(options) }
-    let(:options) { { :testing => 123, :clone => :hello } }
+    let(:options) { { :testing => 123, :clone => :hello, :client_id => 'some_client_id' } }
     let(:str_options) { {}.tap{|o| options.each{|k, v| o[k.to_s] = v}} }
     let(:instance) { klass.new(options) }
 
@@ -226,7 +240,7 @@ describe SeatGeek::Connection do
     let(:faraday) { mock(:faraday, :get => OpenStruct.new({:status => 200, :body => "[]"})) }
 
     context "when .response_format is jsonp" do
-      let(:instance) { klass.new({:response_format => :jsonp}) }
+      let(:instance) { klass.new({:response_format => :jsonp, :client_id => 'some_client_id'}) }
       let(:expected_params) { {:params => params.merge({:format => :jsonp})} }
 
       it "should set the format param to jsonp" do
@@ -236,7 +250,7 @@ describe SeatGeek::Connection do
     end
 
     context "when .response_format is xml" do
-      let(:instance) { klass.new({:response_format => :xml}) }
+      let(:instance) { klass.new({:response_format => :xml, :client_id => 'some_client_id'}) }
       let(:expected_params) { {:params => params.merge({:format => :xml})} }
 
       it "should set the format param to xml" do
@@ -246,7 +260,7 @@ describe SeatGeek::Connection do
     end
 
     context "when additional parameters were passed to #initialize" do
-      let(:instance) { klass.new({:response_format => :jsonp, :testing => 123}) }
+      let(:instance) { klass.new({:response_format => :jsonp, :testing => 123, :client_id => 'some_client_id'}) }
       let(:expected_params) { {:params => params.merge({:format => :jsonp, :testing => 123})} }
 
       it "should add those parameters to the request params" do
@@ -254,6 +268,18 @@ describe SeatGeek::Connection do
         instance.request(uri_segment, params)
       end
     end
+
+    context "when client_id was passed as a parameter" do
+      let(:instance) { klass.new }
+      let(:params) { {:client_id => 'some_client_id'} }
+      let(:expected_params) { {:params => params.merge({:client_id => 'some_client_id'})} }
+
+      it "should make the request with the client_id parameter set" do
+        Faraday.should_receive(:new).with(url, expected_params).and_return(faraday)
+        instance.request(uri_segment, params)
+      end
+    end
+
   end
 
   describe "#taxonomies" do
