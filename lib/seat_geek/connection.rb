@@ -77,11 +77,11 @@ module SeatGeek
     def request(url, params)
       fail "You must provide a `client_id` for SeatGeek" unless client_id || params[:client_id]
       handle_response(Faraday.new(*builder(url, params.clone)) do |build|
-        build.adapter adapter
         if client_id
           build.use Faraday::Request::BasicAuthentication, client_id, nil
         end
         build.use Faraday::Response::VerboseLogger, logger unless logger.nil?
+        build.adapter adapter
       end.get)
     end
 

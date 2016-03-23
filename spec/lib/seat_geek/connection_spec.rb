@@ -12,7 +12,7 @@ describe SeatGeek::Connection do
     it { should == default }
     it "should be writable" do
       klass.adapter = :typhoeus
-      klass.adapter.should == :typhoeus
+      expect(klass.adapter).to eq(:typhoeus)
     end
 
     after { klass.adapter = default }
@@ -20,12 +20,13 @@ describe SeatGeek::Connection do
 
   describe ".events" do
     it "proxies to #events" do
-      klass.any_instance.should_receive(:events).and_return(nil)
+      expect_any_instance_of(klass).to receive(:events).and_return(nil)
+      # klass.any_instance.should_receive(:events).and_return(nil)
       klass.events
     end
 
     it "passes any attributes to #events" do
-      klass.any_instance.should_receive(:events).with(1, 2).and_return(nil)
+      expect_any_instance_of(klass).to receive(:events).with(1, 2).and_return(nil)
       klass.events(1, 2)
     end
   end
@@ -38,7 +39,7 @@ describe SeatGeek::Connection do
     it { should == default }
     it "should be writable" do
       klass.logger = logger
-      klass.logger.should == logger
+      expect(klass.logger).to eq(logger)
     end
 
     after { klass.logger = default }
@@ -46,7 +47,7 @@ describe SeatGeek::Connection do
 
   describe ".options" do
     it "should return a hash of all of the class level settings" do
-      klass.options.should == {
+      expect(klass.options).to eq({
         :adapter => :net_http,
         :logger => nil,
         :protocol => :https,
@@ -54,18 +55,18 @@ describe SeatGeek::Connection do
         :url => "api.seatgeek.com",
         :version => 2,
         :client_id => nil
-      }
+      })
     end
   end
 
   describe ".performers" do
     it "proxies to #performers" do
-      klass.any_instance.should_receive(:performers).and_return(nil)
+      expect_any_instance_of(klass).to receive(:performers).and_return(nil)
       klass.performers
     end
 
     it "passes any attributes to #performers" do
-      klass.any_instance.should_receive(:performers).with(1, 2).and_return(nil)
+      expect_any_instance_of(klass).to receive(:performers).with(1, 2).and_return(nil)
       klass.performers(1, 2)
     end
   end
@@ -77,7 +78,7 @@ describe SeatGeek::Connection do
     it { should == default }
     it "should be writable" do
       klass.protocol = :https
-      klass.protocol.should == :https
+      expect(klass.protocol).to eq(:https)
     end
 
     after { klass.protocol = default }
@@ -90,7 +91,7 @@ describe SeatGeek::Connection do
     it { should == default }
     it "should be writable" do
       klass.client_id = 'some_client_id'
-      klass.client_id.should == 'some_client_id'
+      expect(klass.client_id).to eq('some_client_id')
     end
 
     after { klass.client_id = default }
@@ -103,7 +104,7 @@ describe SeatGeek::Connection do
     it { should == default }
     it "should be writable" do
       klass.response_format = :jsonp
-      klass.response_format.should == :jsonp
+      expect(klass.response_format).to eq(:jsonp)
     end
 
     after { klass.response_format = default }
@@ -111,12 +112,12 @@ describe SeatGeek::Connection do
 
   describe ".taxonomies" do
     it "proxies to #taxonomies" do
-      klass.any_instance.should_receive(:taxonomies).and_return(nil)
+      expect_any_instance_of(klass).to receive(:taxonomies).and_return(nil)
       klass.taxonomies
     end
 
     it "passes any attributes to #taxonomies" do
-      klass.any_instance.should_receive(:taxonomies).with(1, 2).and_return(nil)
+      expect_any_instance_of(klass).to receive(:taxonomies).with(1, 2).and_return(nil)
       klass.taxonomies(1, 2)
     end
   end
@@ -128,7 +129,7 @@ describe SeatGeek::Connection do
     it { should == default }
     it "should be writable" do
       klass.url = "ticketevolution.com"
-      klass.url.should == "ticketevolution.com"
+      expect(klass.url).to eq('ticketevolution.com')
     end
 
     after { klass.url = default }
@@ -136,12 +137,12 @@ describe SeatGeek::Connection do
 
   describe ".venues" do
     it "proxies to #venues" do
-      klass.any_instance.should_receive(:venues).and_return(nil)
+      expect_any_instance_of(klass).to receive(:venues).and_return(nil)
       klass.venues
     end
 
     it "passes any attributes to #venues" do
-      klass.any_instance.should_receive(:venues).with(1, 2).and_return(nil)
+      expect_any_instance_of(klass).to receive(:venues).with(1, 2).and_return(nil)
       klass.venues(1, 2)
     end
   end
@@ -153,7 +154,7 @@ describe SeatGeek::Connection do
     it { should == 2 }
     it "should be writable" do
       klass.version = 1
-      klass.version.should == 1
+      expect(klass.version).to eq(1)
     end
 
     after { klass.version = default }
@@ -166,16 +167,16 @@ describe SeatGeek::Connection do
     let(:instance) { klass.new(options) }
 
     it "should take options passed and store them on top of the class options hash" do
-      instance.instance_eval('@options').should == expected
+      expect(instance.instance_eval('@options')).to eq(expected)
     end
 
     it "should convert the keys passed to symbols" do
-      klass.new(str_options).instance_eval('@options').should == expected
+      expect(klass.new(str_options).instance_eval('@options')).to eq(expected)
     end
 
     it "should serve options up via read accessor methods unless the methods already exist" do
-      instance.testing.should == options[:testing]
-      instance.clone.should_not == options[:clone]
+      expect(instance.testing).to eq(options[:testing])
+      expect(instance.clone).not_to eq(options[:clone])
     end
   end
 
@@ -184,7 +185,7 @@ describe SeatGeek::Connection do
     let(:params) { {:test => 123} }
 
     it "should call #request with the correct url segment and the params passed" do
-      instance.should_receive(:request).with(url, params)
+      expect(instance).to receive(:request).with(url, params)
       instance.events(params)
     end
   end
@@ -198,7 +199,7 @@ describe SeatGeek::Connection do
         let(:body) { "{\"meta\":{\"per_page\":1,\"total\":63188,\"page\":1,\"took\":4,\"geolocation\":null},\"events\":[{\"stats\":{\"listing_count\":0,\"average_price\":0,\"lowest_price\":null,\"highest_price\":null},\"relative_url\":\"/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"url\":\"https://seatgeek.com/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"datetime_local\":\"2012-05-14T10:35:00\",\"performers\":[{\"away_team\":true,\"name\":\"Palm Beach Cardinals\",\"url\":\"https://seatgeek.com/palm-beach-cardinals-tickets/\",\"image\":null,\"short_name\":\"Palm Beach Cardinals\",\"slug\":\"palm-beach-cardinals\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9420},{\"home_team\":true,\"name\":\"Jupiter Hammerheads\",\"url\":\"https://seatgeek.com/jupiter-hammerheads-tickets/\",\"image\":null,\"short_name\":\"Jupiter Hammerheads\",\"primary\":true,\"slug\":\"jupiter-hammerheads\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9421}],\"venue\":{\"city\":\"Jupiter\",\"name\":\"Roger Dean Stadium\",\"url\":\"https://seatgeek.com/roger-dean-stadium-tickets/\",\"country\":\"US\",\"state\":\"FL\",\"score\":16592,\"postal_code\":\"33468\",\"location\":{\"lat\":26.8936,\"lon\":-80.1156},\"extended_address\":null,\"address\":\"4751 Main St\",\"id\":3927},\"short_title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"datetime_utc\":\"2012-05-14T14:35:00\",\"score\":0,\"taxonomies\":[{\"parent_id\":null,\"id\":1000000,\"name\":\"sports\"},{\"parent_id\":1000000,\"id\":1010000,\"name\":\"baseball\"},{\"parent_id\":1010000,\"id\":1010300,\"name\":\"minor_league_baseball\"}],\"type\":\"minor_league_baseball\",\"id\":798459}]}" }
 
         it "should parse the json returned and respond with a ruby object" do
-          instance.handle_response(response).should == MultiJson.decode(body)
+          expect(instance.handle_response(response)).to eq(MultiJson.decode(body))
         end
       end
 
@@ -207,7 +208,7 @@ describe SeatGeek::Connection do
         let(:body) { "Internal Server Error" }
 
         it "should return the status code and exact result body" do
-          instance.handle_response(response).should == {:status => status, :body => body}
+          expect(instance.handle_response(response)).to eq({:status => status, :body => body})
         end
       end
     end
@@ -217,8 +218,7 @@ describe SeatGeek::Connection do
       let(:body) { "{\"meta\":{\"per_page\":1,\"total\":63188,\"page\":1,\"took\":4,\"geolocation\":null},\"events\":[{\"stats\":{\"listing_count\":0,\"average_price\":0,\"lowest_price\":null,\"highest_price\":null},\"relative_url\":\"/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"url\":\"https://seatgeek.com/palm-beach-cardinals-at-jupiter-hammerheads-tickets/minor-league-baseball/2012-05-14/798459/\",\"datetime_local\":\"2012-05-14T10:35:00\",\"performers\":[{\"away_team\":true,\"name\":\"Palm Beach Cardinals\",\"url\":\"https://seatgeek.com/palm-beach-cardinals-tickets/\",\"image\":null,\"short_name\":\"Palm Beach Cardinals\",\"slug\":\"palm-beach-cardinals\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9420},{\"home_team\":true,\"name\":\"Jupiter Hammerheads\",\"url\":\"https://seatgeek.com/jupiter-hammerheads-tickets/\",\"image\":null,\"short_name\":\"Jupiter Hammerheads\",\"primary\":true,\"slug\":\"jupiter-hammerheads\",\"score\":0,\"images\":[],\"type\":\"minor_league_baseball\",\"id\":9421}],\"venue\":{\"city\":\"Jupiter\",\"name\":\"Roger Dean Stadium\",\"url\":\"https://seatgeek.com/roger-dean-stadium-tickets/\",\"country\":\"US\",\"state\":\"FL\",\"score\":16592,\"postal_code\":\"33468\",\"location\":{\"lat\":26.8936,\"lon\":-80.1156},\"extended_address\":null,\"address\":\"4751 Main St\",\"id\":3927},\"short_title\":\"Palm Beach Cardinals at Jupiter Hammerheads\",\"datetime_utc\":\"2012-05-14T14:35:00\",\"score\":0,\"taxonomies\":[{\"parent_id\":null,\"id\":1000000,\"name\":\"sports\"},{\"parent_id\":1000000,\"id\":1010000,\"name\":\"baseball\"},{\"parent_id\":1010000,\"id\":1010300,\"name\":\"minor_league_baseball\"}],\"type\":\"minor_league_baseball\",\"id\":798459}]}" }
 
       it "should return the status code and exact result body" do
-        klass.new(:response_format => :json).\
-          handle_response(response).should == {:status => status, :body => body}
+        expect(klass.new(:response_format => :json).handle_response(response)).to eq({:status => status, :body => body})
       end
     end
   end
@@ -228,7 +228,7 @@ describe SeatGeek::Connection do
     let(:params) { {:test => 123} }
 
     it "should call #request with the correct url segment and the params passed" do
-      instance.should_receive(:request).with(url, params)
+      expect(instance).to receive(:request).with(url, params)
       instance.performers(params)
     end
   end
@@ -237,14 +237,14 @@ describe SeatGeek::Connection do
     let(:uri_segment) { '/venues' }
     let(:url) { "https://api.seatgeek.com/2#{uri_segment}" }
     let(:params) { {} }
-    let(:faraday) { mock(:faraday, :get => OpenStruct.new({:status => 200, :body => "[]"})) }
+    let(:faraday) { double(:faraday, :get => OpenStruct.new({:status => 200, :body => "[]"})) }
 
     context "when .response_format is jsonp" do
       let(:instance) { klass.new({:response_format => :jsonp, :client_id => 'some_client_id'}) }
       let(:expected_params) { {:params => params.merge({:format => :jsonp})} }
 
       it "should set the format param to jsonp" do
-        Faraday.should_receive(:new).with(url, expected_params).and_return(faraday)
+        expect(Faraday).to receive(:new).with(url, expected_params).and_return(faraday)
         instance.request(uri_segment, params)
       end
     end
@@ -254,7 +254,7 @@ describe SeatGeek::Connection do
       let(:expected_params) { {:params => params.merge({:format => :xml})} }
 
       it "should set the format param to xml" do
-        Faraday.should_receive(:new).with(url, expected_params).and_return(faraday)
+        expect(Faraday).to receive(:new).with(url, expected_params).and_return(faraday)
         instance.request(uri_segment, params)
       end
     end
@@ -264,7 +264,7 @@ describe SeatGeek::Connection do
       let(:expected_params) { {:params => params.merge({:format => :jsonp, :testing => 123})} }
 
       it "should add those parameters to the request params" do
-        Faraday.should_receive(:new).with(url, expected_params).and_return(faraday)
+        expect(Faraday).to receive(:new).with(url, expected_params).and_return(faraday)
         instance.request(uri_segment, params)
       end
     end
@@ -275,7 +275,7 @@ describe SeatGeek::Connection do
       let(:expected_params) { {:params => params.merge({:client_id => 'some_client_id'})} }
 
       it "should make the request with the client_id parameter set" do
-        Faraday.should_receive(:new).with(url, expected_params).and_return(faraday)
+        expect(Faraday).to receive(:new).with(url, expected_params).and_return(faraday)
         instance.request(uri_segment, params)
       end
     end
@@ -287,14 +287,14 @@ describe SeatGeek::Connection do
     let(:params) { {:test => 123} }
 
     it "should call #request with the correct url segment and the params passed" do
-      instance.should_receive(:request).with(url, params)
+      expect(instance).to receive(:request).with(url, params)
       instance.taxonomies(params)
     end
   end
 
   describe "#uri" do
     it "should take in a path and combine it with protocol, url and version" do
-      instance.uri('/events').should == "https://api.seatgeek.com/2/events"
+      expect(instance.uri('/events')).to eq('https://api.seatgeek.com/2/events')
     end
   end
 
@@ -303,7 +303,7 @@ describe SeatGeek::Connection do
     let(:params) { {:test => 123} }
 
     it "should call #request with the correct url segment and the params passed" do
-      instance.should_receive(:request).with(url, params)
+      expect(instance).to receive(:request).with(url, params)
       instance.venues(params)
     end
   end
