@@ -6,7 +6,7 @@ gem 'rake', '~> 0.9.2'
 gem 'yajl-ruby', '~> 1.1.0'
 
 group :test do
-  gem 'rspec', '~> 2.10.0'
+  gem 'rspec', '~> 3.4.0'
 end
 
 group :no_travis do
