@@ -1,8 +1,6 @@
 bundler_args: --without no_travis
 language: ruby
 rvm:
-  - ree
-  - 1.8.7
   - 1.9.2
   - 2.1.0
 gemfile:
