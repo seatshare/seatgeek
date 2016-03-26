@@ -9,8 +9,7 @@ For more information, including a detailed description of the functionality avai
 **Rubies supported**
 
 - 1.9.2
-- 1.8.7
-- ree
+- 2.1.0
 
 Installation
 ------------
