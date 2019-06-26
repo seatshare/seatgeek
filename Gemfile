@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'faraday', '~> 0.8.11'
 gem 'multi_json', '~> 1.3.5'
 gem 'rake', '~> 0.9.2'
-gem 'yajl-ruby', '~> 1.3.1'
+gem 'yajl-ruby', '~> 1.4.1'
 
 group :test do
   gem 'rspec', '~> 3.4.0'
