@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'faraday', '~> 0.8.11'
 gem 'multi_json', '~> 1.3.5'
-gem 'rake', '~> 0.9.2'
+gem 'rake', '~> 12.3.3'
 gem 'yajl-ruby', '~> 1.3.1'
 
 group :test do
