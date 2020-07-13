@@ -1,7 +1,14 @@
-bundler_args: --without no_travis
 language: ruby
+dist: xenial
+sudo: false
+
 rvm:
-  - 1.9.2
-  - 2.1.0
-gemfile:
-  - Gemfile
+  - 2.5.3
+
+before_install:
+  - gem install bundler
+
+install: bundle install --retry=3
+
+notifications:
+  email: false
