@@ -1,6 +1,6 @@
 language: ruby
 dist: xenial
-sudo: false
+os: linux
 
 rvm:
   - 2.5.3
