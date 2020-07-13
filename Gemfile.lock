@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    seatgeek (1.0.1)
+    seatgeek (1.0.2)
       faraday
       multi_json
       rake
