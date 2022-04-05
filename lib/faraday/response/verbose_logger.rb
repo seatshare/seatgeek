@@ -1,7 +1,7 @@
 require 'forwardable'
 
 module Faraday
-  class Response::VerboseLogger < Response::Middleware
+  class Response::VerboseLogger < Middleware
     extend Forwardable
 
     def initialize(app, logger)
