@@ -25,4 +25,4 @@ jobs:
 
       - name: Run Tests
         run: |
-          rake
+          bundle exec rake -t
