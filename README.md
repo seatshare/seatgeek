@@ -1,4 +1,4 @@
-SeatGeek [![Build Status](https://secure.travis-ci.org/seatshare/seatgeek.png)](http://travis-ci.org/seatshare/seatgeek)
+SeatGeek [![Run CI Tasks](https://github.com/seatshare/seatgeek/actions/workflows/ci.yml/badge.svg)](https://github.com/seatshare/seatgeek/actions/workflows/ci.yml)
 ========
 SeatGeek maintains a canonical directory of live events in the United States. The SeatGeek Platform makes it easy to construct applications that help users find and discover events by exposing the wealth of data and powerful search behind SeatGeek.com in an easy-to-consume format.
 
@@ -6,10 +6,10 @@ This Gem is designed to be a platform agnostic wrapper around the SeatGeek Platf
 
 For more information, including a detailed description of the functionality available, visit [The SeatGeek Platform documentation site](http://platform.seatgeek.com).
 
-**Rubies supported**
+**Ruby Versions Supported**
 
-- 1.9.2
-- 2.1.0
+- 2.7
+- 3.0
 
 Installation
 ------------
