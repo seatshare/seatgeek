@@ -1,9 +1,13 @@
+# frozen_string_literal: true
+
 require 'logger'
 require 'multi_json'
 require 'yajl'
 
 MultiJson.engine = :yajl
 
+##
+# Module: SeatGeek
 module SeatGeek
 end
 
